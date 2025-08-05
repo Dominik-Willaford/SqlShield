@@ -48,7 +48,7 @@ The library is powered by a SqlShield section in your main application's appsett
 }
 ```
 ### 3. Register Services in Program.cs
-In your application's Program.cs file, call the AddBusinessLogicServices extension method to register all of the library's services with the dependency injection container.
+In your application's Program.cs file, call the AddDatabaseServices extension method to register all of the library's services with the dependency injection container.
 
 ```
 using SqlShield; // Your library's namespace
@@ -58,7 +58,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ... other services like AddControllersWithViews()
 
 // This single line registers all SqlShield services
-builder.Services.AddBusinessLogicServices(builder.Configuration);
+builder.Services.AddDatabaseServices(builder.Configuration);
 
 var app = builder.Build();
 ```
