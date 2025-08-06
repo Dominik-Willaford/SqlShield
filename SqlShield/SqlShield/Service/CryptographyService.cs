@@ -10,118 +10,110 @@ using System.Threading.Tasks;
 
 namespace SqlShield.Service
 {
-    internal class CryptographyService : ICryptography, IDisposable
+    // The class no longer needs to be IDisposable as we will manage resources within each method.
+    internal class CryptographyService : ICryptography
     {
-        private TripleDES _tripleDES = TripleDES.Create();
-        bool _disposed = false;
-        private byte[] TruncateHash(string key, int length)
-        {
-            SHA1 sha1 = SHA1.Create();
+        // ... (Constants and constructor are unchanged)
+        private const int KeySize = 32;
+        private const int NonceSize = 12;
+        private const int TagSize = 16;
+        private const int Pbkdf2Iterations = 100000;
 
-            // Hash the key.
-            byte[] keyBytes = System.Text.Encoding.Unicode.GetBytes(key);
-            byte[] hash = sha1.ComputeHash(keyBytes);
-            var oldHash = hash;
-            hash = new byte[length - 1 + 1];
-
-            // Truncate or pad the hash.
-            if (oldHash != null)
-                Array.Copy(oldHash, hash, Math.Min(length - 1 + 1, oldHash.Length));
-            return hash;
-        }
+        private readonly string _masterKey;
 
         public CryptographyService(IOptions<SqlShieldSettings> settings)
         {
-            string cryptoKey = settings.Value.CryptoKey;
-            if (string.IsNullOrEmpty(cryptoKey))
+            _masterKey = settings.Value.CryptoKey;
+            if (string.IsNullOrEmpty(_masterKey))
             {
-                throw new ArgumentNullException(nameof(cryptoKey), "CryptoKey cannot be null or empty. Check your appsettings.json.");
+                throw new ArgumentNullException(nameof(_masterKey), "CryptoKey cannot be null or empty in appsettings.json.");
             }
-
-            // The rest of your constructor logic is perfect.
-            _tripleDES.Key = TruncateHash(cryptoKey, _tripleDES.KeySize / 8);
-            _tripleDES.IV = TruncateHash("", _tripleDES.BlockSize / 8);
         }
 
+
+        public string EncryptData(string plaintext)
+        {
+            if (string.IsNullOrEmpty(plaintext))
+                return string.Empty;
+
+            byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
+            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce, Pbkdf2Iterations, HashAlgorithmName.SHA256);
+            byte[] key = rfc2898.GetBytes(KeySize);
+
+            byte[] plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
+            byte[] ciphertext = new byte[plaintextBytes.Length];
+            byte[] tag = new byte[TagSize];
+
+            using (var aes = new AesGcm(key, TagSize))
+            {
+                aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
+            }
+
+            byte[] encryptedPayload = new byte[NonceSize + TagSize + ciphertext.Length];
+            Buffer.BlockCopy(nonce, 0, encryptedPayload, 0, NonceSize);
+            Buffer.BlockCopy(tag, 0, encryptedPayload, NonceSize, TagSize);
+            Buffer.BlockCopy(ciphertext, 0, encryptedPayload, NonceSize + TagSize, ciphertext.Length);
+
+            return Convert.ToBase64String(encryptedPayload);
+        }
+
+        public string DecryptData(string encryptedPayloadBase64)
+        {
+            if (string.IsNullOrEmpty(encryptedPayloadBase64))
+                return string.Empty;
+
+            byte[] encryptedPayload = Convert.FromBase64String(encryptedPayloadBase64);
+
+            if (encryptedPayload.Length < NonceSize + TagSize)
+            {
+                throw new CryptographicException("Invalid encrypted payload.");
+            }
+
+            Span<byte> nonce = encryptedPayload.AsSpan(0, NonceSize);
+            Span<byte> tag = encryptedPayload.AsSpan(NonceSize, TagSize);
+            Span<byte> ciphertext = encryptedPayload.AsSpan(NonceSize + TagSize);
+
+            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce.ToArray(), Pbkdf2Iterations, HashAlgorithmName.SHA256);
+            byte[] key = rfc2898.GetBytes(KeySize);
+
+            byte[] plaintextBytes = new byte[ciphertext.Length];
+
+            // *** CORRECTED IMPLEMENTATION ***
+            // 1. Create an INSTANCE with the derived key.
+            using (var aes = new AesGcm(key, TagSize))
+            {
+                // 2. Call the DECRYPT method on the INSTANCE ('aes').
+                aes.Decrypt(nonce, ciphertext, tag, plaintextBytes);
+            }
+
+            return Encoding.UTF8.GetString(plaintextBytes);
+        }
+
+        // --- Other methods remain unchanged ---
+        // ... (GenerateHash, CompareInputHash, BuildConnString)
+        #region Other Methods
         public string GenerateHash(HashAlgorithm hashAlgorithm, string input)
         {
-            // Convert the input string to a byte array and compute the hash.
             byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
             var sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data
-            // and format each one as a hexadecimal string.
             for (int i = 0; i < data.Length; i++)
             {
                 sBuilder.Append(data[i].ToString("x2"));
             }
-
-            // Return the hexadecimal string.
             return sBuilder.ToString();
         }
 
         public bool CompareInputHash(HashAlgorithm hashAlgorithm, string input, string hash)
         {
-            // Hash the input.
             var hashOfInput = GenerateHash(hashAlgorithm, input);
-            // Create a StringComparer an compare the hashes.
-            var comparer = StringComparer.Ordinal;
-            return comparer.Compare(hashOfInput, hash) == 0;
-        }
-
-        public string EncryptData(string plaintext)
-        {
-
-            // Convert the plaintext string to a byte array.
-            byte[] plaintextBytes = System.Text.Encoding.Unicode.GetBytes(plaintext);
-
-            // Create the stream.
-            System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            // Create the encoder to write to the stream.
-            CryptoStream encStream = new CryptoStream(ms, _tripleDES.CreateEncryptor(), System.Security.Cryptography.CryptoStreamMode.Write);
-
-            // Use the crypto stream to write the byte array to the stream.
-            encStream.Write(plaintextBytes, 0, plaintextBytes.Length);
-            encStream.FlushFinalBlock();
-
-            // Convert the encrypted stream to a printable string.
-            return Convert.ToBase64String(ms.ToArray());
-        }
-
-        public string DecryptData(string encryptedtext)
-        {
-            if (string.IsNullOrEmpty(encryptedtext))
-                return string.Empty;
-
-            // This handles cases where the base64 string might have been URL-encoded
-            // and spaces replaced plus signs.
-            byte[] encryptedBytes = Convert.FromBase64String(encryptedtext.Replace(" ", "+"));
-
-            using (var ms = new MemoryStream())
-            using (var decStream = new CryptoStream(ms, _tripleDES.CreateDecryptor(), CryptoStreamMode.Write))
-            {
-                decStream.Write(encryptedBytes, 0, encryptedBytes.Length);
-                decStream.FlushFinalBlock();
-                return Encoding.Unicode.GetString(ms.ToArray());
-            }
+            return StringComparer.OrdinalIgnoreCase.Equals(hashOfInput, hash);
         }
 
         public string BuildConnString(string connString, string pass)
         {
             string decryptPass = DecryptData(pass);
-            return String.Format(connString, decryptPass);
+            return $"{connString};Password={decryptPass}";
         }
-
-        public void Dispose()
-        {
-            if (!_disposed)
-            {
-                _tripleDES?.Dispose();
-                _disposed = true;
-            }
-        }
+        #endregion
     }
 }
