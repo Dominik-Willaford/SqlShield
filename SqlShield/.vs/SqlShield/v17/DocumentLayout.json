@@ -1,49 +1,49 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\",
+  "WorkspaceRootPath": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\service\\cryptographyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\service\\cryptographyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\service\\cryptographyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\service\\storedprocedureexecutorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\service\\storedprocedureexecutorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\service\\storedprocedureexecutorservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\service\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\service\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\service\\databaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\extension\\servicecollectionextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\interface\\idatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\interface\\idatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\interface\\idatabaseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\interface\\istoredprocedureexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\interface\\istoredprocedureexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\interface\\istoredprocedureexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\interface\\icryptography.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\interface\\icryptography.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\interface\\icryptography.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\model\\processingresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\model\\processingresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\model\\processingresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\model\\inputmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\model\\inputmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\model\\inputmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\model\\sqlshieldsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\model\\sqlshieldsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\model\\sqlshieldsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dwillaford\\source\\github\\sqlshield\\sqlshield\\sqlshield\\model\\connectionsetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|c:\\users\\dominik\\source\\repos\\sqlshield\\sqlshield\\sqlshield\\model\\connectionsetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{77A47F1B-74A0-4954-9C91-6280C624BBC2}|SqlShield\\SqlShield.csproj|solutionrelative:sqlshield\\model\\connectionsetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -54,53 +54,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 298,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:13:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:14:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:15:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "StoredProcedureExecutorService.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\StoredProcedureExecutorService.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\StoredProcedureExecutorService.cs",
               "RelativeDocumentMoniker": "SqlShield\\Service\\StoredProcedureExecutorService.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\StoredProcedureExecutorService.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\StoredProcedureExecutorService.cs",
               "RelativeToolTip": "SqlShield\\Service\\StoredProcedureExecutorService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAApwBkAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T15:54:25.772Z"
+              "WhenOpened": "2025-08-05T15:54:25.772Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "IStoredProcedureExecutor.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\IStoredProcedureExecutor.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\IStoredProcedureExecutor.cs",
               "RelativeDocumentMoniker": "SqlShield\\Interface\\IStoredProcedureExecutor.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\IStoredProcedureExecutor.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\IStoredProcedureExecutor.cs",
               "RelativeToolTip": "SqlShield\\Interface\\IStoredProcedureExecutor.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T15:52:36.423Z"
+              "WhenOpened": "2025-08-05T15:52:36.423Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "CryptographyService.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\CryptographyService.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\CryptographyService.cs",
               "RelativeDocumentMoniker": "SqlShield\\Service\\CryptographyService.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\CryptographyService.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\CryptographyService.cs",
               "RelativeToolTip": "SqlShield\\Service\\CryptographyService.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAACkAAABNAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-05T14:52:03.108Z",
               "EditorCaption": ""
@@ -109,97 +99,105 @@
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "ICryptography.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\ICryptography.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\ICryptography.cs",
               "RelativeDocumentMoniker": "SqlShield\\Interface\\ICryptography.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\ICryptography.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\ICryptography.cs",
               "RelativeToolTip": "SqlShield\\Interface\\ICryptography.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:46:56.19Z"
+              "WhenOpened": "2025-08-05T14:46:56.19Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "ServiceCollectionExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Extension\\ServiceCollectionExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Extension\\ServiceCollectionExtensions.cs",
               "RelativeDocumentMoniker": "SqlShield\\Extension\\ServiceCollectionExtensions.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Extension\\ServiceCollectionExtensions.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Extension\\ServiceCollectionExtensions.cs",
               "RelativeToolTip": "SqlShield\\Extension\\ServiceCollectionExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:32:43.658Z"
+              "WhenOpened": "2025-08-05T14:32:43.658Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "DatabaseService.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\DatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\DatabaseService.cs",
               "RelativeDocumentMoniker": "SqlShield\\Service\\DatabaseService.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Service\\DatabaseService.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Service\\DatabaseService.cs",
               "RelativeToolTip": "SqlShield\\Service\\DatabaseService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:08:36.973Z"
+              "WhenOpened": "2025-08-05T14:08:36.973Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "InputModel.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\InputModel.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\InputModel.cs",
               "RelativeDocumentMoniker": "SqlShield\\Model\\InputModel.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\InputModel.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\InputModel.cs",
               "RelativeToolTip": "SqlShield\\Model\\InputModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:05:12.389Z"
+              "WhenOpened": "2025-08-05T14:05:12.389Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 10,
               "Title": "ConnectionSetting.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\ConnectionSetting.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\ConnectionSetting.cs",
               "RelativeDocumentMoniker": "SqlShield\\Model\\ConnectionSetting.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\ConnectionSetting.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\ConnectionSetting.cs",
               "RelativeToolTip": "SqlShield\\Model\\ConnectionSetting.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:04:03.381Z"
+              "WhenOpened": "2025-08-05T14:04:03.381Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
               "Title": "SqlShieldSettings.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\SqlShieldSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\SqlShieldSettings.cs",
               "RelativeDocumentMoniker": "SqlShield\\Model\\SqlShieldSettings.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\SqlShieldSettings.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\SqlShieldSettings.cs",
               "RelativeToolTip": "SqlShield\\Model\\SqlShieldSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T14:03:32.135Z"
+              "WhenOpened": "2025-08-05T14:03:32.135Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "ProcessingResult.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\ProcessingResult.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\ProcessingResult.cs",
               "RelativeDocumentMoniker": "SqlShield\\Model\\ProcessingResult.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Model\\ProcessingResult.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Model\\ProcessingResult.cs",
               "RelativeToolTip": "SqlShield\\Model\\ProcessingResult.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T13:59:49.021Z"
+              "WhenOpened": "2025-08-05T13:59:49.021Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "IDatabaseService.cs",
-              "DocumentMoniker": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\IDatabaseService.cs",
+              "DocumentMoniker": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\IDatabaseService.cs",
               "RelativeDocumentMoniker": "SqlShield\\Interface\\IDatabaseService.cs",
-              "ToolTip": "C:\\Users\\dwillaford\\source\\Github\\SqlShield\\SqlShield\\SqlShield\\Interface\\IDatabaseService.cs",
+              "ToolTip": "C:\\Users\\Dominik\\source\\repos\\SqlShield\\SqlShield\\SqlShield\\Interface\\IDatabaseService.cs",
               "RelativeToolTip": "SqlShield\\Interface\\IDatabaseService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-05T13:54:59.414Z"
+              "WhenOpened": "2025-08-05T13:54:59.414Z",
+              "EditorCaption": ""
             }
           ]
         }

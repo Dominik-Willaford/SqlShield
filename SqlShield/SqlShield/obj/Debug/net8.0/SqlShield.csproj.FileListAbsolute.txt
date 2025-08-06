@@ -10,3 +10,16 @@ C:\Users\dwillaford\source\Workspaces\MaterialTugger\SqlShield\SqlShield\obj\Deb
 C:\Users\dwillaford\source\Workspaces\MaterialTugger\SqlShield\SqlShield\obj\Debug\net8.0\refint\SqlShield.dll
 C:\Users\dwillaford\source\Workspaces\MaterialTugger\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.pdb
 C:\Users\dwillaford\source\Workspaces\MaterialTugger\SqlShield\SqlShield\obj\Debug\net8.0\ref\SqlShield.dll
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\bin\Debug\net8.0\SqlShield.deps.json
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\bin\Debug\net8.0\SqlShield.dll
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\bin\Debug\net8.0\SqlShield.pdb
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.csproj.AssemblyReference.cache
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.AssemblyInfoInputs.cache
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.AssemblyInfo.cs
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.csproj.CoreCompileInputs.cache
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.sourcelink.json
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.dll
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\refint\SqlShield.dll
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\SqlShield.pdb
+C:\Users\Dominik\source\repos\SqlShield\SqlShield\SqlShield\obj\Debug\net8.0\ref\SqlShield.dll

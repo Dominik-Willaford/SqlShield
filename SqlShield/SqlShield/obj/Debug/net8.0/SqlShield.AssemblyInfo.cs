@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SqlShield")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa1e37a16e1792175125c4be995f159d38e34a0c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b134442d1ee9c03ccc8dbde4a47c92fa526eee7")]
 [assembly: System.Reflection.AssemblyProductAttribute("SqlShield")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SqlShield")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
