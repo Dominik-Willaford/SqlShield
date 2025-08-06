@@ -52,4 +52,4 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
-/SqlShield/.vs/SqlShield
+/SqlShield/SqlShield/.vs
