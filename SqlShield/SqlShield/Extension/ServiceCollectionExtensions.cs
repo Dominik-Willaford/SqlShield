@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SqlShield.Interface;
 using SqlShield.Model;
 using SqlShield.Service;
@@ -15,7 +16,9 @@ namespace SqlShield.Extension
     {
         public static IServiceCollection AddDatabaseServices(
                    this IServiceCollection services,
-                   IConfiguration configuration)
+                   IConfiguration configuration,
+                   string encryptionKey,
+                   int iterations = 100000)
         {
             // This line reads the "SqlShield" section from the parent's appsettings.json
             // and makes it available for injection.
@@ -24,8 +27,16 @@ namespace SqlShield.Extension
             // This registers your service. When a constructor asks for IDatabaseService,
             // the DI container will provide an instance of DatabaseService.
             services.AddScoped<IDatabaseService, DatabaseService>();
-            services.AddScoped<ICryptography, CryptographyService>();
             services.AddScoped<IStoredProcedureExecutor, StoredProcedureExecutorService>();
+            
+            /* Registering using a factory function to tell the dependency injection how to 
+             * build the service.
+             */
+            services.AddScoped<ICryptography>(provider =>
+            {
+                return new CryptographyService(encryptionKey, iterations);
+            });
+
 
             return services;
         }

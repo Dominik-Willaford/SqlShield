@@ -17,17 +17,18 @@ namespace SqlShield.Service
         private const int KeySize = 32;
         private const int NonceSize = 12;
         private const int TagSize = 16;
-        private const int Pbkdf2Iterations = 100000;
+        private readonly int _iterations;
 
         private readonly string _masterKey;
 
-        public CryptographyService(IOptions<SqlShieldSettings> settings)
+        public CryptographyService(string encryptKey, int iterations)
         {
-            _masterKey = settings.Value.CryptoKey;
+            _masterKey = encryptKey;
             if (string.IsNullOrEmpty(_masterKey))
             {
-                throw new ArgumentNullException(nameof(_masterKey), "CryptoKey cannot be null or empty in appsettings.json.");
+                throw new ArgumentNullException(nameof(_masterKey), "Encryption key cannot be null or empty.");
             }
+            _iterations = iterations;
         }
 
 
@@ -37,7 +38,7 @@ namespace SqlShield.Service
                 return string.Empty;
 
             byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
-            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce, Pbkdf2Iterations, HashAlgorithmName.SHA256);
+            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce, _iterations, HashAlgorithmName.SHA256);
             byte[] key = rfc2898.GetBytes(KeySize);
 
             byte[] plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
@@ -73,7 +74,7 @@ namespace SqlShield.Service
             Span<byte> tag = encryptedPayload.AsSpan(NonceSize, TagSize);
             Span<byte> ciphertext = encryptedPayload.AsSpan(NonceSize + TagSize);
 
-            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce.ToArray(), Pbkdf2Iterations, HashAlgorithmName.SHA256);
+            using var rfc2898 = new Rfc2898DeriveBytes(_masterKey, nonce.ToArray(), _iterations, HashAlgorithmName.SHA256);
             byte[] key = rfc2898.GetBytes(KeySize);
 
             byte[] plaintextBytes = new byte[ciphertext.Length];
@@ -89,9 +90,6 @@ namespace SqlShield.Service
             return Encoding.UTF8.GetString(plaintextBytes);
         }
 
-        // --- Other methods remain unchanged ---
-        // ... (GenerateHash, CompareInputHash, BuildConnString)
-        #region Other Methods
         public string GenerateHash(HashAlgorithm hashAlgorithm, string input)
         {
             byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
@@ -114,6 +112,5 @@ namespace SqlShield.Service
             string decryptPass = DecryptData(pass);
             return $"{connString};Password={decryptPass}";
         }
-        #endregion
     }
 }

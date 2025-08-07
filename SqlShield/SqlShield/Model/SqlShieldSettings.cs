@@ -8,7 +8,6 @@ namespace SqlShield.Model
 {
     public class SqlShieldSettings
     {
-        public string CryptoKey { get; set; }
         public Dictionary<string, ConnectionSetting> Connections { get; set; }
     }
 }
