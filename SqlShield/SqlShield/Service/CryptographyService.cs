@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SqlShield.Interface;
 using SqlShield.Model;
 using System;
@@ -109,8 +110,11 @@ namespace SqlShield.Service
 
         public string BuildConnString(string connString, string pass)
         {
+            if (pass.IsNullOrEmpty()) {
+                return connString;
+            }
             string decryptPass = DecryptData(pass);
-            return $"{connString};Password={decryptPass}";
+            return String.Format(connString, decryptPass);
         }
     }
 }

@@ -17,8 +17,7 @@ namespace SqlShield.Extension
         public static IServiceCollection AddDatabaseServices(
                    this IServiceCollection services,
                    IConfiguration configuration,
-                   string encryptionKey,
-                   int iterations = 100000)
+                   string encryptionKey)
         {
             // This line reads the "SqlShield" section from the parent's appsettings.json
             // and makes it available for injection.
@@ -34,6 +33,7 @@ namespace SqlShield.Extension
              */
             services.AddScoped<ICryptography>(provider =>
             {
+                int iterations = configuration.GetValue<int>("SqlShield:Iterations", 100000);
                 return new CryptographyService(encryptionKey, iterations);
             });
 
