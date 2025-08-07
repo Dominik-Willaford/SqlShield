@@ -53,3 +53,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /SqlShield/SqlShield/.vs
+/SqlShield/.vs/SqlShield
