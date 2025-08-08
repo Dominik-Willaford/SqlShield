@@ -28,16 +28,6 @@ namespace SqlShield.Extension
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddScoped<IStoredProcedureExecutor, StoredProcedureExecutorService>();
             
-            /* Registering using a factory function to tell the dependency injection how to 
-             * build the service.
-             */
-            services.AddScoped<ICryptography>(provider =>
-            {
-                int iterations = configuration.GetValue<int>("SqlShield:Iterations", 100000);
-                return new CryptographyService(encryptionKey, iterations);
-            });
-
-
             return services;
         }
     }
