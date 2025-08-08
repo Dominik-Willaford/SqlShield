@@ -12,26 +12,11 @@ namespace SqlShield.Service
     internal class DatabaseService : IDatabaseService
     {
         private readonly SqlShieldSettings _sqlShieldSettings;
-        private readonly ICryptography _cryptoService;
 
-        public DatabaseService(IOptions<SqlShieldSettings> sqlShieldSettings, ICryptography cryptoService)
+        public DatabaseService(IOptions<SqlShieldSettings> sqlShieldSettings)
         {
             _sqlShieldSettings = sqlShieldSettings.Value;
-            _cryptoService = cryptoService;
-        }
-
-        public string GetConnectionString(string connectionName)
-        {
-            if (!_sqlShieldSettings.Connections.TryGetValue(connectionName, out var connection))
-            {
-                throw new ArgumentException($"Connection name '{connectionName}' not found in configuration.");
-            }
-
-            string connString = _cryptoService.BuildConnString(connection.ConnectionString, connection.ConnectionPassword);
-
-            return connString;
-        }
-
+        }    
 
     }
 }

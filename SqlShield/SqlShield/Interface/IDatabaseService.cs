@@ -9,6 +9,6 @@ namespace SqlShield.Interface
 {
     public interface IDatabaseService
     {
-        string GetConnectionString(string connectionName);
+        
     }
 }
