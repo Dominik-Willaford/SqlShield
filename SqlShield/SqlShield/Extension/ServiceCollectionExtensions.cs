@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SqlShield.Interface;
@@ -7,6 +8,7 @@ using SqlShield.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +16,43 @@ namespace SqlShield.Extension
 {
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Registers a custom Dapper TypeMap for a given type and naming convention converter.
+        /// </summary>
+        public static IServiceCollection RegisterDapperConvention<T>(this IServiceCollection services, INameConventionConverter converter)
+        {
+            SqlMapper.SetTypeMap(typeof(T), new ConventionTypeMapper(typeof(T), converter));
+            return services;
+        }
+
+        /// <summary>
+        /// Scans a given assembly for types with the DapperConventionAttribute and registers them.
+        /// This removes the need for manual, per-type registration.
+        /// </summary>
+        public static IServiceCollection AddDapperConventionsFromAssembly(this IServiceCollection services, Assembly assembly)
+        {
+            var typesToRegister = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract)
+                .Select(t => new
+                {
+                    Type = t,
+                    Attribute = t.GetCustomAttribute<DapperConventionAttribute>()
+                })
+                .Where(x => x.Attribute != null);
+
+            foreach (var item in typesToRegister)
+            {
+                var converter = (INameConventionConverter)Activator.CreateInstance(item.Attribute.ConverterType);
+                SqlMapper.SetTypeMap(item.Type, new ConventionTypeMapper(item.Type, converter));
+            }
+
+            return services;
+        }
+
         public static IServiceCollection AddDatabaseServices(
-                   this IServiceCollection services,
-                   IConfiguration configuration,
-                   string encryptionKey)
+            this IServiceCollection services,
+            IConfiguration configuration,
+            string encryptionKey)
         {
             // This line reads the "SqlShield" section from the parent's appsettings.json
             // and makes it available for injection.
@@ -27,7 +62,11 @@ namespace SqlShield.Extension
             // the DI container will provide an instance of DatabaseService.
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddScoped<IStoredProcedureExecutor, StoredProcedureExecutorService>();
-            
+
+            // We can now use our DapperConventionManager logic to register the mappings.
+            // This happens once at application startup.
+            services.AddDapperConventionsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+
             return services;
         }
     }
