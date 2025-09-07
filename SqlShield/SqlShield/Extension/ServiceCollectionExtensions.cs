@@ -51,17 +51,13 @@ namespace SqlShield.Extension
 
         public static IServiceCollection AddDatabaseServices(
             this IServiceCollection services,
-            IConfiguration configuration,
-            string encryptionKey)
+            IConfiguration configuration)
         {
-            // This line reads the "SqlShield" section from the parent's appsettings.json
-            // and makes it available for injection.
-            services.Configure<SqlShieldSettings>(configuration.GetSection("SqlShield"));
-
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             // This registers your service. When a constructor asks for IDatabaseService,
             // the DI container will provide an instance of DatabaseService.
-            services.AddScoped<IDatabaseService, DatabaseService>();
-            services.AddScoped<IStoredProcedureExecutor, StoredProcedureExecutorService>();
+            services.AddScoped<IDatabaseService>(sp => new DatabaseService(connectionString));
+            services.AddScoped<IStoredProcedureExecutor>(sp => new StoredProcedureExecutorService(sp.GetRequiredService<IDatabaseService>()));
 
             // We can now use our DapperConventionManager logic to register the mappings.
             // This happens once at application startup.

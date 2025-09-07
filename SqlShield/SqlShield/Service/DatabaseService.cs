@@ -11,12 +11,11 @@ namespace SqlShield.Service
 {
     internal class DatabaseService : IDatabaseService
     {
-        private readonly SqlShieldSettings _sqlShieldSettings;
+        private readonly string _connectionString;
 
-        public DatabaseService(IOptions<SqlShieldSettings> sqlShieldSettings)
+        public DatabaseService(string connectionString)
         {
-            _sqlShieldSettings = sqlShieldSettings.Value;
-        }    
-
+            _connectionString = connectionString;
+        }
     }
 }
