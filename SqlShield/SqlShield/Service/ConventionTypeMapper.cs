@@ -11,92 +11,71 @@ using static Dapper.SqlMapper;
 
 namespace SqlShield.Service
 {
-    internal class ConventionTypeMapper : IConventionTypeMapper
+    /// <summary>
+    /// Custom type mapper that applies column-to-property mapping conventions.
+    /// Priority:
+    /// 1. ColumnOverrideAttribute (per property)
+    /// 2. DapperConventionAttribute (per class)
+    /// 3. Global convention (set via SqlMapper.TypeMapProvider)
+    /// 4. DefaultTypeMap (Dapper default)
+    /// </summary>
+    internal class ConventionTypeMapper : SqlMapper.ITypeMap
     {
-        private readonly Dictionary<string, PropertyInfo> _columnMappings;
-        private readonly DefaultTypeMap _defaultMap;
+        private readonly SqlMapper.ITypeMap _defaultTypeMap;
+        private readonly INameConventionConverter? _converter;
+        private readonly PropertyInfo[] _properties;
 
-        /// <summary>
-        /// Initializes a new instance of the ConventionTypeMapper.
-        /// </summary>
-        /// <param name="type">The type to map to.</param>
-        /// <param name="columnNameConverter">An instance of a class that implements INameConventionConverter.</param>
-        public ConventionTypeMapper(Type type, INameConventionConverter columnNameConverter)
+        public ConventionTypeMapper(Type type, INameConventionConverter? globalConverter = null)
         {
-            _columnMappings = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
-            _defaultMap = new DefaultTypeMap(type);
+            _defaultTypeMap = new DefaultTypeMap(type);
+            _properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            // This is the correct approach: build the map in the constructor.
-            var properties = type.GetProperties();
-            foreach (var property in properties)
+            // Class-level convention (wins over global if defined)
+            var conventionAttr = type.GetCustomAttribute<DapperConventionAttribute>();
+            if (conventionAttr != null)
             {
-                // First, map the property name directly (in case it's a perfect match).
-                _columnMappings[property.Name] = property;
+                _converter = (INameConventionConverter)Activator.CreateInstance(conventionAttr.ConverterType)!;
+            }
+            else
+            {
+                _converter = globalConverter;
+            }
+        }
 
-                // Then, use the converter to get the database column name and map it as well.
-                string databaseColumnName = columnNameConverter.Convert(property.Name);
-                if (!string.IsNullOrEmpty(databaseColumnName))
+        public ConstructorInfo? FindConstructor(string[] names, Type[] types)
+            => _defaultTypeMap.FindConstructor(names, types);
+
+        public ConstructorInfo? FindExplicitConstructor()
+            => _defaultTypeMap.FindExplicitConstructor();
+
+        public SqlMapper.IMemberMap GetConstructorParameter(ConstructorInfo constructor, string columnName)
+            => _defaultTypeMap.GetConstructorParameter(constructor, columnName);
+
+        public SqlMapper.IMemberMap? GetMember(string columnName)
+        {
+            foreach (var prop in _properties)
+            {
+                // 1. ColumnOverrideAttribute wins
+                var overrideAttr = prop.GetCustomAttribute<ColumnOverrideAttribute>();
+                if (overrideAttr != null &&
+                    string.Equals(overrideAttr.ColumnName, columnName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _columnMappings[databaseColumnName] = property;
+                    return new ConventionMemberMap(columnName, prop);
+                }
+
+                // 2. Apply converter (class-level or global)
+                if (_converter != null)
+                {
+                    var convertedName = _converter.Convert(columnName);
+                    if (string.Equals(convertedName, prop.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return new ConventionMemberMap(columnName, prop);
+                    }
                 }
             }
-        }
 
-        /// <summary>
-        /// Gets the constructor for a given set of names and types.
-        /// Delegates to the underlying DefaultTypeMap.
-        /// </summary>
-        public ConstructorInfo FindConstructor(string[] names, Type[] types)
-        {
-            return _defaultMap.FindConstructor(names, types);
-        }
-
-        /// <summary>
-        /// Gets an explicit constructor.
-        /// Delegates to the underlying DefaultTypeMap.
-        /// </summary>
-        public ConstructorInfo FindExplicitConstructor()
-        {
-            return _defaultMap.FindExplicitConstructor();
-        }
-
-        /// <summary>
-        /// Gets the property for a given column name. This is the core of our custom logic.
-        /// </summary>
-        /// <param name="columnName">The name of the database column.</param>
-        /// <returns>The PropertyInfo object for the matching property, or null if no match is found.</returns>
-        public PropertyInfo GetProperty(string columnName)
-        {
-            if (_columnMappings.TryGetValue(columnName, out var property))
-            {
-                return property;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the member map for a given column name. This is the primary method Dapper calls for mapping.
-        /// </summary>
-        public IMemberMap GetMember(string columnName)
-        {
-            var property = GetProperty(columnName);
-            if (property != null)
-            {
-                // Now, we use our custom ConventionMemberMap to return a valid IMemberMap instance.
-                return new ConventionMemberMap(columnName, property);
-            }
-
-            // If our custom mapping doesn't find a match, defer to the default map.
-            return _defaultMap.GetMember(columnName);
-        }
-
-        /// <summary>
-        /// Gets the member map for a given constructor parameter.
-        /// </summary>
-        public IMemberMap GetConstructorParameter(ConstructorInfo constructor, string columnName)
-        {
-            return _defaultMap.GetConstructorParameter(constructor, columnName);
+            // 3. Fallback to default Dapper logic
+            return _defaultTypeMap.GetMember(columnName);
         }
     }
 }

@@ -17,52 +17,64 @@ namespace SqlShield.Extension
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Registers a custom Dapper TypeMap for a given type and naming convention converter.
+        /// Registers SqlShield convention mappers for all classes in the provided assembly.
         /// </summary>
-        public static IServiceCollection RegisterDapperConvention<T>(this IServiceCollection services, INameConventionConverter converter)
+        public static IServiceCollection AddSqlShield(this IServiceCollection services, Assembly assembly)
         {
-            SqlMapper.SetTypeMap(typeof(T), new ConventionTypeMapper(typeof(T), converter));
-            return services;
-        }
+            var types = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract);
 
-        /// <summary>
-        /// Scans a given assembly for types with the DapperConventionAttribute and registers them.
-        /// This removes the need for manual, per-type registration.
-        /// </summary>
-        public static IServiceCollection AddDapperConventionsFromAssembly(this IServiceCollection services, Assembly assembly)
-        {
-            var typesToRegister = assembly.GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract)
-                .Select(t => new
-                {
-                    Type = t,
-                    Attribute = t.GetCustomAttribute<DapperConventionAttribute>()
-                })
-                .Where(x => x.Attribute != null);
-
-            foreach (var item in typesToRegister)
+            foreach (var type in types)
             {
-                var converter = (INameConventionConverter)Activator.CreateInstance(item.Attribute.ConverterType);
-                SqlMapper.SetTypeMap(item.Type, new ConventionTypeMapper(item.Type, converter));
+                // Only apply if class has [DapperConvention] OR at least one [ColumnOverride]
+                var hasConventionAttr = type.GetCustomAttribute<DapperConventionAttribute>() != null;
+                var hasOverrideAttr = type.GetProperties()
+                    .Any(p => p.GetCustomAttribute<ColumnOverrideAttribute>() != null);
+
+                if (hasConventionAttr || hasOverrideAttr)
+                {
+                    SqlMapper.SetTypeMap(type, new ConventionTypeMapper(type));
+                }
             }
 
             return services;
         }
 
-        public static IServiceCollection AddDatabaseServices(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        /// <summary>
+        /// Registers SqlShield convention mappers for all classes in the assembly containing T.
+        /// </summary>
+        public static IServiceCollection AddSqlShield<T>(this IServiceCollection services)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            // This registers your service. When a constructor asks for IDatabaseService,
-            // the DI container will provide an instance of DatabaseService.
-            services.AddScoped<IDatabaseService>(sp => new DatabaseService(connectionString));
-            services.AddScoped<IStoredProcedureExecutor>(sp => new StoredProcedureExecutorService(sp.GetRequiredService<IDatabaseService>()));
+            return services.AddSqlShield(typeof(T).Assembly);
+        }
 
-            // We can now use our DapperConventionManager logic to register the mappings.
-            // This happens once at application startup.
-            services.AddDapperConventionsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+        //// <summary>
+        /// Enables SqlShield with snake_case global mapping convention.
+        /// </summary>
+        public static IServiceCollection AddSqlShieldWithSnakeCase(this IServiceCollection services)
+        {
+            var converter = new SnakeCaseConverter();
+            SqlMapper.TypeMapProvider = type => new ConventionTypeMapper(type, converter);
+            return services;
+        }
 
+        /// <summary>
+        /// Enables SqlShield with kebab-case global mapping convention.
+        /// </summary>
+        public static IServiceCollection AddSqlShieldWithKebabCase(this IServiceCollection services)
+        {
+            var converter = new KebabCaseConverter();
+            SqlMapper.TypeMapProvider = type => new ConventionTypeMapper(type, converter);
+            return services;
+        }
+
+        /// <summary>
+        /// Enables SqlShield with no global convention.
+        /// Falls back to DefaultTypeMap unless a class-level [DapperConvention] is applied.
+        /// </summary>
+        public static IServiceCollection AddSqlShieldWithoutConvention(this IServiceCollection services)
+        {
+            SqlMapper.TypeMapProvider = type => new ConventionTypeMapper(type, null);
             return services;
         }
     }

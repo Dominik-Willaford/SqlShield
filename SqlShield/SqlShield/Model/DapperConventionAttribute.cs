@@ -21,4 +21,22 @@ namespace SqlShield.Model
             ConverterType = converterType;
         }
     }
+
+    /// <summary>
+    /// Explicitly map a property to a database column name.
+    /// This always takes priority over conventions (global or class-level).
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class ColumnOverrideAttribute : Attribute
+    {
+        public string ColumnName { get; }
+
+        public ColumnOverrideAttribute(string columnName)
+        {
+            if (string.IsNullOrWhiteSpace(columnName))
+                throw new ArgumentException("Column name cannot be null or whitespace.", nameof(columnName));
+
+            ColumnName = columnName;
+        }
+    }
 }

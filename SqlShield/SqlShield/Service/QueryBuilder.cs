@@ -2,130 +2,202 @@
 using SqlShield.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SqlShield.Service
 {
-    internal class QueryBuilder<T> : IQueryBuilder<T> where T : new()
+    internal sealed class QueryBuilder<T> : IQueryBuilder<T> where T : new()
     {
         private readonly DatabaseService _service;
         private readonly List<Expression<Func<T, bool>>> _wherePredicates = new();
+        private readonly List<(LambdaExpression keySelector, bool descending)> _orderings = new();
         private readonly string _tableName;
 
         public QueryBuilder(DatabaseService service)
         {
             _service = service;
-            _tableName = $"{typeof(T).Name}s"; // Convention
+            _tableName = DefaultPluralizedTable(typeof(T).Name); // convention
         }
 
         public IQueryBuilder<T> Where(Expression<Func<T, bool>> predicate)
         {
-            // 1. Simply add the expression to our list.
             _wherePredicates.Add(predicate);
-            return this; // Return 'this' to allow chaining.
+            return this;
         }
 
         public IQueryBuilder<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector)
         {
-            // Logic to parse the OrderBy expression
+            _orderings.Add((keySelector, false));
+            return this;
+        }
+
+        public IQueryBuilder<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
+        {
+            _orderings.Add((keySelector, true));
             return this;
         }
 
         public async Task<IEnumerable<T>> QueryAsync()
         {
-            // 2. Build and validate the SQL just before execution.
             var (sql, parameters) = await BuildAndValidateSqlAsync();
-
-            // 3. Execute the final, validated query.
-            using (var connection = _service.CreateConnection())
-            {
-                return await connection.QueryAsync<T>(sql, parameters);
-            }
+            using var connection = _service.CreateConnection();
+            connection.Open();
+            return await connection.QueryAsync<T>(sql, parameters);
         }
 
         public async Task<T> QuerySingleAsync()
         {
             var (sql, parameters) = await BuildAndValidateSqlAsync();
-            using (var connection = _service.CreateConnection())
-            {
-                return await connection.QuerySingleOrDefaultAsync<T>(sql);
-            }
-        }
-
-        /// <summary>
-        /// Parses a simple binary expression (e.g., u => u.Id == 5) to extract the
-        /// property name and the value.
-        /// </summary>
-        private (string MemberName, object Value) ParseBinaryExpression(Expression<Func<T, bool>> predicate)
-        {
-            // The body of the lambda expression (e.g., u.Id == 5)
-            if (predicate.Body is not BinaryExpression binaryExpr)
-            {
-                throw new NotSupportedException("Only simple binary expressions are supported in Where clauses.");
-            }
-
-            // We need to find the side of the expression that is the Member (u.Id)
-            // and which side is the Constant (5).
-            MemberExpression memberExpr;
-            ConstantExpression constantExpr;
-
-            if (binaryExpr.Left is MemberExpression leftMember && binaryExpr.Right is ConstantExpression rightConstant)
-            {
-                memberExpr = leftMember;
-                constantExpr = rightConstant;
-            }
-            else if (binaryExpr.Right is MemberExpression rightMember && binaryExpr.Left is ConstantExpression leftConstant)
-            {
-                memberExpr = rightMember;
-                constantExpr = leftConstant;
-            }
-            else
-            {
-                // This could be enhanced to support more complex scenarios, like comparing two properties
-                throw new NotSupportedException("Expression must compare a property to a constant value.");
-            }
-
-            string memberName = memberExpr.Member.Name;
-            object value = constantExpr.Value;
-
-            return (memberName, value);
+            using var connection = _service.CreateConnection();
+            connection.Open();
+            return await connection.QuerySingleAsync<T>(sql, parameters);
         }
 
         public async Task<(string Sql, DynamicParameters Parameters)> BuildAndValidateSqlAsync()
         {
+            await Task.Yield(); // keep async-friendly, no validation
+
             var parameters = new DynamicParameters();
-            var sqlBuilder = new StringBuilder($"SELECT * FROM {_tableName}");
+            var sb = new StringBuilder($"SELECT * FROM {QuoteIdentifier(_tableName)}");
 
             if (_wherePredicates.Any())
             {
-                sqlBuilder.Append(" WHERE ");
-                using (var connection = _service.CreateConnection())
+                var parts = new List<string>();
+                for (int i = 0; i < _wherePredicates.Count; i++)
                 {
-                    // Get the schema ONCE for all validations in this query.
-                    var schema = await _service.GetSchemaCache().GetTableSchemaAsync(typeof(T), connection);
-
-                    for (int i = 0; i < _wherePredicates.Count; i++)
-                    {
-                        var predicate = _wherePredicates[i];
-                        var (memberName, value) = ParseBinaryExpression(predicate); // Your existing helper
-
-                        // Validate the member against the cached schema
-                        if (!schema.Columns.Contains(memberName))
-                        {
-                            throw new InvalidOperationException($"Column '{memberName}' not found on table '{schema.TableName}'.");
-                        }
-
-                        var paramName = $"@p{i}";
-                        sqlBuilder.Append($"{(i > 0 ? " AND " : "")}[{memberName}] = {paramName}");
-                        parameters.Add(paramName, value);
-                    }
+                    parts.Add(ParsePredicateToSql(_wherePredicates[i], parameters, i));
                 }
+                sb.Append(" WHERE ").Append(string.Join(" AND ", parts));
             }
 
-            return (sqlBuilder.ToString(), parameters);
+            if (_orderings.Any())
+            {
+                var orderParts = _orderings.Select(o =>
+                {
+                    var propName = GetMemberName(o.keySelector);
+                    var dir = o.descending ? "DESC" : "ASC";
+                    return $"{QuoteIdentifier(propName)} {dir}";
+                });
+                sb.Append(" ORDER BY ").Append(string.Join(", ", orderParts));
+            }
+
+            return (sb.ToString(), parameters);
         }
+
+        // ---------- Helpers ----------
+
+        private static string DefaultPluralizedTable(string name)
+        {
+            if (name.EndsWith("y", StringComparison.Ordinal)) return name[..^1] + "ies";
+            if (name.EndsWith("s", StringComparison.Ordinal)) return name + "es";
+            return name + "s";
+        }
+
+        private string ParsePredicateToSql(LambdaExpression predicate, DynamicParameters p, int indexBase)
+        {
+            return predicate.Body switch
+            {
+                BinaryExpression be => ParseBinary(be, p, indexBase),
+                MethodCallExpression mce => ParseStringMethod(mce, p, indexBase),
+                _ => throw new NotSupportedException($"Unsupported predicate: {predicate.Body.NodeType}")
+            };
+        }
+
+        private string ParseBinary(BinaryExpression be, DynamicParameters p, int indexBase)
+        {
+            (MemberExpression member, Expression other, ExpressionType op) = be.Left switch
+            {
+                MemberExpression m when IsColumnCandidate(m) => (m, be.Right, be.NodeType),
+                _ when be.Right is MemberExpression m2 && IsColumnCandidate(m2) => (m2, be.Left, FlipOperator(be.NodeType)),
+                _ => throw new NotSupportedException("Binary Where requires a member vs constant/expression.")
+            };
+
+            var columnName = member.Member.Name;
+            var quotedColumn = QuoteIdentifier(columnName);
+
+            var value = Evaluate(other);
+            if (value is null || value == DBNull.Value)
+            {
+                return op switch
+                {
+                    ExpressionType.Equal => $"{quotedColumn} IS NULL",
+                    ExpressionType.NotEqual => $"{quotedColumn} IS NOT NULL",
+                    _ => throw new NotSupportedException("Only == and != supported for NULL.")
+                };
+            }
+
+            var paramName = $"p{indexBase}";
+            p.Add(paramName, value);
+
+            var opSql = op switch
+            {
+                ExpressionType.Equal => "=",
+                ExpressionType.NotEqual => "<>",
+                ExpressionType.GreaterThan => ">",
+                ExpressionType.GreaterThanOrEqual => ">=",
+                ExpressionType.LessThan => "<",
+                ExpressionType.LessThanOrEqual => "<=",
+                _ => throw new NotSupportedException($"Operator {op} not supported.")
+            };
+
+            return $"{quotedColumn} {opSql} @{paramName}";
+        }
+
+        private string ParseStringMethod(MethodCallExpression mce, DynamicParameters p, int indexBase)
+        {
+            if (mce.Object is not MemberExpression member || !IsColumnCandidate(member))
+                throw new NotSupportedException("Supported string methods must be called on a mapped property.");
+
+            var arg = Evaluate(mce.Arguments[0]);
+            var columnName = member.Member.Name;
+            var quotedColumn = QuoteIdentifier(columnName);
+            var paramName = $"p{indexBase}";
+
+            return mce.Method.Name switch
+            {
+                nameof(string.Contains) => AddLike(p, paramName, $"%{arg}%", $"{quotedColumn} LIKE @{paramName}"),
+                nameof(string.StartsWith) => AddLike(p, paramName, $"{arg}%", $"{quotedColumn} LIKE @{paramName}"),
+                nameof(string.EndsWith) => AddLike(p, paramName, $"%{arg}", $"{quotedColumn} LIKE @{paramName}"),
+                _ => throw new NotSupportedException($"String method {mce.Method.Name} not supported.")
+            };
+
+            static string AddLike(DynamicParameters p, string name, object? val, string sql)
+            { p.Add(name, val); return sql; }
+        }
+
+        private static bool IsColumnCandidate(MemberExpression m)
+            => m.Member.MemberType == System.Reflection.MemberTypes.Property && m.Expression is ParameterExpression;
+
+        private static string GetMemberName(LambdaExpression lambda)
+        {
+            if (lambda.Body is MemberExpression me && me.Member.MemberType == System.Reflection.MemberTypes.Property)
+                return me.Member.Name;
+            throw new NotSupportedException("OrderBy key selector must be a simple property access.");
+        }
+
+        private static object? Evaluate(Expression expr)
+        {
+            if (expr is ConstantExpression c) return c.Value;
+            var obj = Expression.Convert(expr, typeof(object));
+            var getter = Expression.Lambda<Func<object?>>(obj);
+            return getter.Compile().Invoke();
+        }
+
+        private static string QuoteIdentifier(string ident)
+            => ident.StartsWith("[") && ident.EndsWith("]") ? ident : $"[{ident}]";
+
+        private static ExpressionType FlipOperator(ExpressionType op) => op switch
+        {
+            ExpressionType.GreaterThan => ExpressionType.LessThan,
+            ExpressionType.GreaterThanOrEqual => ExpressionType.LessThanOrEqual,
+            ExpressionType.LessThan => ExpressionType.GreaterThan,
+            ExpressionType.LessThanOrEqual => ExpressionType.GreaterThanOrEqual,
+            _ => op
+        };
     }
 }
